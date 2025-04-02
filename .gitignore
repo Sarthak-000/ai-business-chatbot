@@ -1,0 +1,39 @@
+# Ignore environment variables & API keys
+.env
+
+# Ignore Python cache & compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore Virtual Environment
+venv/
+.env/
+.envrc
+
+# Ignore logs & temp files
+logs/
+*.log
+*.out
+*.pid
+
+# Ignore dataset or large files (if any)
+data/
+*.csv
+*.json
+*.db
+
+# Ignore FAISS & Pinecone indexes (if stored locally)
+faiss_index/
+pinecone_index/
+
+# Ignore Streamlit's temporary files
+.streamlit/
+
+# Ignore OS-generated files
+.DS_Store
+Thumbs.db
