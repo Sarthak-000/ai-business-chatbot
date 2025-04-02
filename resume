@@ -1,0 +1,56 @@
+import { useState } from "react";
+
+export default function ResumeAnalyzer() {
+    const [resumeText, setResumeText] = useState("");
+    const [analysis, setAnalysis] = useState(null);
+    const [loading, setLoading] = useState(false);
+
+    const handleAnalyze = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch("http://127.0.0.1:5000/analyze", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ resume: resumeText })
+            });
+            const data = await response.json();
+            setAnalysis(data);
+        } catch (error) {
+            console.error("Error analyzing resume:", error);
+        }
+        setLoading(false);
+    };
+
+    return (
+        <div className="flex flex-col items-center p-8">
+            <h1 className="text-2xl font-bold mb-4">AI Resume Analyzer</h1>
+            <textarea
+                className="border p-2 w-96 h-40"
+                placeholder="Paste your resume here..."
+                value={resumeText}
+                onChange={(e) => setResumeText(e.target.value)}
+            />
+            <button
+                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+                onClick={handleAnalyze}
+                disabled={loading}
+            >
+                {loading ? "Analyzing..." : "Analyze Resume"}
+            </button>
+            {analysis && (
+                <div className="mt-6 w-96 border p-4">
+                    <h2 className="text-xl font-semibold">Extracted Skills</h2>
+                    <p className="mt-2">{analysis.skills.join(", ")}</p>
+                    <h2 className="text-xl font-semibold mt-4">Matched Jobs</h2>
+                    <ul className="mt-2">
+                        {analysis.matched_jobs.map((job, index) => (
+                            <li key={index}>{job.title} (Score: {job.score})</li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+        </div>
+    );
+}
